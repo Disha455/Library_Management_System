@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand"><i class="fas fa-book-open"></i> Library Management System</div>
+        <div class="nav-links">
+            <button class="nav-link active" onclick="showSection('home')"><i class="fas fa-home"></i> Home</button>
+            <button class="nav-link" onclick="showSection('books')"><i class="fas fa-book"></i> Books</button>
+            <button class="nav-link" onclick="showSection('students')"><i class="fas fa-user-graduate"></i> Students</button>
+            <button class="nav-link" onclick="showSection('transactions')"><i class="fas fa-exchange-alt"></i> Transactions</button>
+            <button class="nav-link" onclick="showSection('fines')"><i class="fas fa-money-bill-wave"></i> Fines</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Homepage Section -->
+        <section id="home" class="section">
+            <div class="homepage">
+                <h1><i class="fas fa-book-reader"></i> Welcome to Library Management System</h1>
+                <div class="dashboard">
+                    <div class="dashboard-item">
+                        <i class="fas fa-book fa-3x"></i>
+                        <h3>Available Books</h3>
+                        <p id="booksCount">0</p>
+                    </div>
+                    <div class="dashboard-item">
+                        <i class="fas fa-user-graduate fa-3x"></i>
+                        <h3>Total Students</h3>
+                        <p id="studentsCount">0</p>
+                    </div>
+                    <div class="dashboard-item">
+                        <i class="fas fa-exchange-alt fa-3x"></i>
+                        <h3>Active Transactions</h3>
+                        <p id="activeTransactionsCount">0</p>
+                    </div>
+                    <div class="dashboard-item">
+                        <i class="fas fa-money-bill-wave fa-3x"></i>
+                        <h3>Total Fines</h3>
+                        <p id="finesCount">0</p>
+                    </div>
+                </div>
+                <div class="quick-actions">
+                    <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+                    <div class="action-buttons">
+                        <button onclick="showModal('addBookModal')" class="btn-action">
+                            <i class="fas fa-book-medical"></i> Add New Book
+                        </button>
+                        <button onclick="showModal('addStudentModal')" class="btn-action">
+                            <i class="fas fa-user-plus"></i> Add New Student
+                        </button>
+                        <button onclick="showModal('issueBookModal')" class="btn-action">
+                            <i class="fas fa-hand-holding"></i> Issue Book
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Books Section -->
+        <section id="books" class="section" style="display: none;">
+            <div class="section-header">
+                <h2><i class="fas fa-book"></i> Books</h2>
+                <button class="btn-add" onclick="showModal('addBookModal')"><i class="fas fa-plus"></i> Add Book</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Book ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booksTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Students Section -->
+        <section id="students" class="section" style="display: none;">
+            <div class="section-header">
+                <h2><i class="fas fa-user-graduate"></i> Students</h2>
+                <button class="btn-add" onclick="showModal('addStudentModal')"><i class="fas fa-plus"></i> Add Student</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Semester</th>
+                            <th>Mobile</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Transactions Section -->
+        <section id="transactions" class="section" style="display: none;">
+            <div class="section-header">
+                <h2><i class="fas fa-exchange-alt"></i> Transactions</h2>
+                <button class="btn-add" onclick="showModal('issueBookModal')"><i class="fas fa-plus"></i> Issue Book</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Student</th>
+                            <th>Book</th>
+                            <th>Issue Date</th>
+                            <th>Due Date</th>
+                            <th>Return Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Fines Section -->
+        <section id="fines" class="section" style="display: none;">
+            <div class="section-header">
+                <h2><i class="fas fa-money-bill-wave"></i> Fines</h2>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fine ID</th>
+                            <th>Student</th>
+                            <th>Book</th>
+                            <th>Due Date</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="finesTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Book Modal -->
+    <div id="addBookModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-book-medical"></i> Add New Book</h2>
+            <form id="addBookForm">
+                <input type="text" id="bookId" placeholder="Book ID" required>
+                <input type="text" id="bookTitle" placeholder="Title" required>
+                <input type="text" id="bookAuthor" placeholder="Author" required>
+                <input type="text" id="bookGenre" placeholder="Genre" required>
+                <div class="modal-buttons">
+                    <button type="button" onclick="hideModal('addBookModal')" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-submit">Add Book</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Book Modal -->
+    <div id="editBookModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-edit"></i> Edit Book</h2>
+            <form id="editBookForm">
+                <input type="hidden" id="editBookId">
+                <input type="text" id="editBookTitle" placeholder="Title" required>
+                <input type="text" id="editBookAuthor" placeholder="Author" required>
+                <input type="text" id="editBookGenre" placeholder="Genre" required>
+                <div class="modal-buttons">
+                    <button type="button" onclick="hideModal('editBookModal')" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-submit">Update Book</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div id="addStudentModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-user-plus"></i> Add New Student</h2>
+            <form id="addStudentForm">
+                <input type="text" id="studentId" placeholder="Student ID" required>
+                <input type="text" id="studentName" placeholder="Name" required>
+                <input type="text" id="studentSemester" placeholder="Semester" required>
+                <input type="text" id="studentMobile" placeholder="Mobile" required>
+                <div class="modal-buttons">
+                    <button type="button" onclick="hideModal('addStudentModal')" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-submit">Add Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div id="editStudentModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-edit"></i> Edit Student</h2>
+            <form id="editStudentForm">
+                <input type="hidden" id="editStudentId">
+                <input type="text" id="editStudentName" placeholder="Name" required>
+                <input type="text" id="editStudentSemester" placeholder="Semester" required>
+                <input type="text" id="editStudentMobile" placeholder="Mobile" required>
+                <div class="modal-buttons">
+                    <button type="button" onclick="hideModal('editStudentModal')" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-submit">Update Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Issue Book Modal -->
+    <div id="issueBookModal" class="modal">
+        <div class="modal-content">
+            <h2><i class="fas fa-hand-holding"></i> Issue Book</h2>
+            <form id="issueBookForm">
+                <select id="issueStudentId" required>
+                    <option value="">Select Student</option>
+                </select>
+                <select id="issueBookId" required>
+                    <option value="">Select Book</option>
+                </select>
+                <div class="modal-buttons">
+                    <button type="button" onclick="hideModal('issueBookModal')" class="btn-cancel">Cancel</button>
+                    <button type="submit" class="btn-submit">Issue Book</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../static/js/script.js"></script>
+</body>
+</html> 
